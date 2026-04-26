@@ -55,3 +55,35 @@ export async function POST(req) {
     return Response.json({ message: 'Server error' }, { status: 500 });
   }
 }
+
+// READ - Get all appliances or search by serial number
+export async function GET(req) {
+  try {
+    const url = new URL(req.url);
+    const searchSerial = url.searchParams.get('serial');
+
+    if (searchSerial) {
+      // Search by serial number
+      const [appliances] = await pool.query(
+        'SELECT a.*, u.FirstName, u.LastName, u.Email FROM Appliance a JOIN User u ON a.UserID = u.UserID WHERE a.SerialNumber = ?',
+        [searchSerial]
+      );
+      
+      if (appliances.length === 0) {
+        return Response.json({ message: 'No matching appliance found!' }, { status: 404 });
+      }
+      
+      return Response.json(appliances);
+    }
+
+    // Get all appliances
+    const [appliances] = await pool.query(
+      'SELECT a.*, u.FirstName, u.LastName, u.Email FROM Appliance a JOIN User u ON a.UserID = u.UserID'
+    );
+
+    return Response.json(appliances);
+  } catch (err) {
+    console.error('Error:', err);
+    return Response.json({ message: 'Server error' }, { status: 500 });
+  }
+}
