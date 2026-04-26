@@ -117,3 +117,21 @@ export async function PUT(req) {
     return Response.json({ message: 'Server error' }, { status: 500 });
   }
 }
+
+// DELETE - Delete appliance by serial number
+export async function DELETE(req) {
+  try {
+    const { serialNumber } = await req.json();
+
+    if (!serialNumber) {
+      return Response.json({ message: 'Serial number required' }, { status: 400 });
+    }
+
+    await pool.query('DELETE FROM Appliance WHERE SerialNumber = ?', [serialNumber]);
+
+    return Response.json({ message: 'Appliance Deleted' });
+  } catch (err) {
+    console.error('Error:', err);
+    return Response.json({ message: 'Server error' }, { status: 500 });
+  }
+}
