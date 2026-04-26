@@ -87,3 +87,33 @@ export async function GET(req) {
     return Response.json({ message: 'Server error' }, { status: 500 });
   }
 }
+
+// UPDATE - Update appliance details by serial number
+export async function PUT(req) {
+  try {
+    const { 
+      serialNumber,
+      applianceType, 
+      brand, 
+      modelNumber, 
+      purchaseDate, 
+      warrantyExpirationDate, 
+      costOfAppliance 
+    } = await req.json();
+
+    if (!serialNumber) {
+      return Response.json({ message: 'Serial number required' }, { status: 400 });
+    }
+
+    // Update appliance by serial number
+    await pool.query(
+      'UPDATE Appliance SET ApplianceType = ?, Brand = ?, ModelNumber = ?, PurchaseDate = ?, WarrantyExpirationDate = ?, CostOfAppliance = ? WHERE SerialNumber = ?',
+      [applianceType, brand, modelNumber, purchaseDate, warrantyExpirationDate, costOfAppliance, serialNumber]
+    );
+
+    return Response.json({ message: 'Appliance has been updated' });
+  } catch (err) {
+    console.error('Error:', err);
+    return Response.json({ message: 'Server error' }, { status: 500 });
+  }
+}
