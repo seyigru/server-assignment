@@ -9,6 +9,7 @@ export default function DeleteAppliance() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState('search'); // 'search' or 'confirm'
+  const [deletedItems, setDeletedItems] = useState([]);
 
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
@@ -54,6 +55,17 @@ export default function DeleteAppliance() {
 
       if (response.ok) {
         setMessage('Appliance deleted successfully.');
+        
+        // Add to recently deleted list
+        const deletedEntry = {
+          type: appliance.ApplianceType,
+          brand: appliance.Brand,
+          serial: appliance.SerialNumber,
+          owner: `${appliance.FirstName} ${appliance.LastName}`,
+          deletedAt: new Date().toLocaleString()
+        };
+        setDeletedItems([deletedEntry, ...deletedItems]);
+        
         setTimeout(() => {
           setSerialNumber('');
           setAppliance(null);
@@ -110,37 +122,75 @@ export default function DeleteAppliance() {
               </Link>
             </div>
           )}
+
+          {deletedItems.length > 0 && (
+            <div className="deleted-items">
+              <h3>Recently Deleted</h3>
+              {deletedItems.map((item, index) => (
+                <div key={index} className="deleted-item">
+                  <strong>{item.type}</strong> - {item.brand} (Serial: {item.serial})
+                  <br />
+                  <span style={{ fontSize: '0.85rem' }}>
+                    Owner: {item.owner} | Deleted: {item.deletedAt}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
       {step === 'confirm' && appliance && (
         <div className="form-container">
           <h1>Delete Appliance</h1>
-          <p style={{ color: 'var(--error)', marginBottom: '1.5rem', fontWeight: 'bold' }}>
-            ⚠️ This action cannot be undone!
-          </p>
+          
+          <div className="delete-warning">
+            <strong>⚠️ This action cannot be undone!</strong>
+            <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
+              You are about to permanently delete this appliance record from the system.
+            </p>
+          </div>
 
           <div style={{
-            background: 'rgba(233, 69, 96, 0.1)',
-            border: '2px solid var(--error)',
+            background: 'rgba(78, 204, 163, 0.1)',
+            border: '1px solid var(--success)',
             borderRadius: '8px',
             padding: '1.5rem',
             marginBottom: '1.5rem'
           }}>
-            <strong style={{ color: 'var(--text-primary)' }}>Are you sure you want to delete this appliance?</strong>
-            <br />
-            <br />
-            <strong>Appliance Details:</strong>
-            <br />
-            Type: {appliance.ApplianceType}
-            <br />
-            Brand: {appliance.Brand}
-            <br />
-            Model: {appliance.ModelNumber}
-            <br />
-            Serial: {appliance.SerialNumber}
-            <br />
-            Owner: {appliance.FirstName} {appliance.LastName}
+            <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '1rem' }}>
+              Owner Information
+            </strong>
+            <p style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+              <strong>{appliance.FirstName} {appliance.LastName}</strong>
+            </p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>
+              Email: {appliance.Email}
+            </p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+              Address: {appliance.Address} - {appliance.Eircode}
+            </p>
+          </div>
+
+          <div style={{
+            background: 'rgba(0, 0, 0, 0.2)',
+            border: '1px solid var(--border)',
+            borderRadius: '8px',
+            padding: '1.5rem',
+            marginBottom: '1.5rem'
+          }}>
+            <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '1rem' }}>
+              Appliance Details
+            </strong>
+            <p style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+              <strong>{appliance.ApplianceType}</strong> - {appliance.Brand}
+            </p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>
+              Model: {appliance.ModelNumber}
+            </p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+              Serial: {appliance.SerialNumber}
+            </p>
           </div>
 
           <form onSubmit={handleDeleteSubmit}>

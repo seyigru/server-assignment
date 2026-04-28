@@ -79,9 +79,6 @@ export default function AddAppliance() {
   
   return (
     <div>
-        <Link href="/" className="home-button">
-             ⌂
-        </Link>
       <div className="form-container">
         <h1>Add Appliance</h1>
         

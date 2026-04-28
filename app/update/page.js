@@ -16,7 +16,7 @@ export default function UpdateAppliance() {
   });
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState('search'); // 'search' or 'update'
+  const [step, setStep] = useState('search'); // 'search', 'update', or 'preview'
 
   const applianceTypes = ['Fridge', 'Washing Machine', 'Dishwasher', 'Oven', 'Microwave'];
 
@@ -33,12 +33,12 @@ export default function UpdateAppliance() {
       if (response.ok && data.length > 0) {
         setAppliance(data[0]);
         setFormData({
-            applianceType: data[0].ApplianceType,
-            brand: data[0].Brand,
-            modelNumber: data[0].ModelNumber,
-            purchaseDate: data[0].PurchaseDate || '',
-            warrantyExpirationDate: data[0].WarrantyExpirationDate || '',
-            costOfAppliance: data[0].CostOfAppliance
+          applianceType: data[0].ApplianceType,
+          brand: data[0].Brand,
+          modelNumber: data[0].ModelNumber,
+          purchaseDate: data[0].PurchaseDate || '',
+          warrantyExpirationDate: data[0].WarrantyExpirationDate || '',
+          costOfAppliance: data[0].CostOfAppliance
         });
         setStep('update');
       } else {
@@ -58,6 +58,11 @@ export default function UpdateAppliance() {
       ...formData,
       [name]: value
     });
+  };
+
+  const handlePreview = (e) => {
+    e.preventDefault();
+    setStep('preview');
   };
 
   const handleUpdateSubmit = async (e) => {
@@ -113,11 +118,12 @@ export default function UpdateAppliance() {
     setStep('search');
   };
 
+  const handleBackToEdit = () => {
+    setStep('update');
+  };
+
   return (
     <div>
-      <Link href="/" className="home-button">
-        ⌂
-      </Link>
 
       {step === 'search' && (
         <div className="form-container">
@@ -159,7 +165,7 @@ export default function UpdateAppliance() {
             Serial: {appliance.SerialNumber}
           </p>
 
-          <form onSubmit={handleUpdateSubmit}>
+          <form onSubmit={handlePreview}>
             <div className="form-group">
               <label>Appliance Type</label>
               <select
@@ -233,7 +239,7 @@ export default function UpdateAppliance() {
             </div>
 
             <button type="submit" className="btn btn-primary" disabled={loading}>
-              {loading ? 'Updating...' : 'Update Appliance'}
+              {loading ? 'Loading...' : 'Preview Changes'}
             </button>
 
             <button 
@@ -243,6 +249,103 @@ export default function UpdateAppliance() {
               style={{ marginTop: '0.5rem', background: 'var(--text-secondary)' }}
             >
               Search Different Appliance
+            </button>
+          </form>
+
+          {message && (
+            <div className={`message ${message.includes('Error') ? 'error' : 'success'}`}>
+              <strong>{message.includes('Error') ? '⚠️' : '✓'} {message}</strong>
+            </div>
+          )}
+        </div>
+      )}
+
+      {step === 'preview' && appliance && (
+        <div className="form-container">
+          <h1>Preview Changes</h1>
+          
+          <div className="comparison-grid">
+            <div className="comparison-column">
+              <h3>Current Values</h3>
+              
+              <div className="comparison-item">
+                <label>Type</label>
+                <p>{appliance.ApplianceType}</p>
+              </div>
+              
+              <div className="comparison-item">
+                <label>Brand</label>
+                <p>{appliance.Brand}</p>
+              </div>
+              
+              <div className="comparison-item">
+                <label>Model</label>
+                <p>{appliance.ModelNumber}</p>
+              </div>
+              
+              <div className="comparison-item">
+                <label>Purchase Date</label>
+                <p>{appliance.PurchaseDate}</p>
+              </div>
+              
+              <div className="comparison-item">
+                <label>Warranty Expires</label>
+                <p>{appliance.WarrantyExpirationDate}</p>
+              </div>
+              
+              <div className="comparison-item">
+                <label>Cost</label>
+                <p>${appliance.CostOfAppliance}</p>
+              </div>
+            </div>
+
+            <div className="comparison-column">
+              <h3>New Values</h3>
+              
+              <div className="comparison-item">
+                <label>Type</label>
+                <p>{formData.applianceType}</p>
+              </div>
+              
+              <div className="comparison-item">
+                <label>Brand</label>
+                <p>{formData.brand}</p>
+              </div>
+              
+              <div className="comparison-item">
+                <label>Model</label>
+                <p>{formData.modelNumber}</p>
+              </div>
+              
+              <div className="comparison-item">
+                <label>Purchase Date</label>
+                <p>{formData.purchaseDate}</p>
+              </div>
+              
+              <div className="comparison-item">
+                <label>Warranty Expires</label>
+                <p>{formData.warrantyExpirationDate}</p>
+              </div>
+              
+              <div className="comparison-item">
+                <label>Cost</label>
+                <p>${formData.costOfAppliance}</p>
+              </div>
+            </div>
+          </div>
+
+          <form onSubmit={handleUpdateSubmit}>
+            <button type="submit" className="btn btn-primary" disabled={loading}>
+              {loading ? 'Updating...' : 'Confirm Update'}
+            </button>
+
+            <button 
+              type="button"
+              onClick={handleBackToEdit}
+              className="btn btn-primary"
+              style={{ marginTop: '0.5rem', background: 'var(--text-secondary)' }}
+            >
+              Back to Edit
             </button>
           </form>
 

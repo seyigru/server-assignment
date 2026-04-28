@@ -1,9 +1,8 @@
 /**
  * Global styles for the application.
- * Provides consistent typography, colour scheme and base styles across all pages.
+ * Dark theme with cinema-inspired color palette.
  */
 
-/* CSS custom properties for theming - cinema-inspired colour palette */
 :root {
   --primary: #1a1a2e;
   --primary-light: #16213e;
@@ -32,9 +31,9 @@ body {
   line-height: 1.6;
 }
 
-/* Navigation and layout */
+/* Navigation bar */
 nav {
-  background: rgba(15, 52, 96, 0.9);
+  background: rgba(15, 52, 96, 1);
   padding: 1rem 2rem;
   margin-bottom: 2rem;
   border-bottom: 2px solid var(--accent);
@@ -68,7 +67,8 @@ nav a:hover {
   background: var(--accent);
   color: white;
 }
-/* Form styling */
+
+/* Form container */
 .form-container {
   max-width: 560px;
   margin: 0 auto 2rem;
@@ -125,7 +125,7 @@ nav a:hover {
   margin-top: 0.35rem;
 }
 
-/* Buttons */
+/* Button styles */
 .btn {
   padding: 0.875rem 1.75rem;
   font-size: 1rem;
@@ -169,20 +169,19 @@ nav a:hover {
   color: var(--error);
 }
 
-/* Disabled select styling */
+/* Disabled states */
 .form-group select:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* Button disabled state */
 .btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
 }
 
-/* Main page styling */
+/* Home page */
 .main-page {
   max-width: 800px;
   margin: 0 auto;
@@ -233,7 +232,8 @@ nav a:hover {
   color: var(--text-secondary);
   font-size: 0.95rem;
 }
-/* Home Button */
+
+/* Home button fixed position */
 .home-button {
   position: fixed;
   top: 20px;
@@ -261,4 +261,135 @@ nav a:hover {
   background: var(--accent-hover);
   transform: scale(1.1) rotate(5deg);
   box-shadow: 0 6px 16px rgba(233, 69, 96, 0.6);
+}
+
+/* Search result card */
+.search-result-card {
+  background: rgba(78, 204, 163, 0.1);
+  border: 2px solid var(--success);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.result-header {
+  margin-bottom: 1rem;
+}
+
+.result-header strong {
+  color: var(--accent);
+  font-size: 18px;
+}
+
+.result-header p {
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.result-grid div p:first-child {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.result-grid div p:last-child {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.expanded-details {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  border-left: 4px solid var(--accent);
+}
+
+.expanded-details strong {
+  color: var(--text-primary);
+}
+
+.expanded-details p {
+  margin-top: 0.5rem;
+}
+
+/* Update page comparison */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.comparison-column {
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border-left: 4px solid var(--accent);
+}
+
+.comparison-column h3 {
+  color: var(--accent);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.comparison-item {
+  margin-bottom: 1rem;
+}
+
+.comparison-item label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.comparison-item p {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Delete page warning */
+.delete-warning {
+  background: rgba(233, 69, 96, 0.1);
+  border: 2px solid var(--error);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.delete-warning strong {
+  color: var(--error);
+  display: block;
+  margin-bottom: 1rem;
+}
+
+/* Recently deleted items */
+.deleted-items {
+  background: rgba(78, 204, 163, 0.1);
+  border: 1px solid var(--success);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.deleted-items h3 {
+  color: var(--success);
+  margin-bottom: 1rem;
+}
+
+.deleted-item {
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
 }

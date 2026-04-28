@@ -8,14 +8,14 @@ export default function SearchAppliance() {
   const [appliance, setAppliance] = useState(null);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [searched, setSearched] = useState(false);
+  const [expandedDetails, setExpandedDetails] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
     setAppliance(null);
     setLoading(true);
-    setSearched(true);
+    setExpandedDetails(false);
 
     try {
       const response = await fetch(`/api/appliances?serial=${serialNumber}`);
@@ -38,15 +38,12 @@ export default function SearchAppliance() {
     setSerialNumber('');
     setAppliance(null);
     setMessage('');
-    setSearched(false);
+    setExpandedDetails(false);
   };
 
   return (
     <div>
-      <Link href="/" className="home-button">
-         ⌂
-      </Link>
-
+      
       {!appliance && !message && (
         <div className="form-container">
           <h1>Search Appliance</h1>
@@ -93,45 +90,66 @@ export default function SearchAppliance() {
 
       {appliance && (
         <div className="form-container">
-          <div className="message success">
-            <strong>✓ Appliance Found!</strong>
-            <br />
-            <br />
-            <strong>User Information:</strong>
-            <br />
-            Name: {appliance.FirstName} {appliance.LastName}
-            <br />
-            Email: {appliance.Email}
-            <br />
-            <br />
-            <strong>Appliance Details:</strong>
-            <br />
-            Type: {appliance.ApplianceType}
-            <br />
-            Brand: {appliance.Brand}
-            <br />
-            Model: {appliance.ModelNumber}
-            <br />
-            Serial: {appliance.SerialNumber}
-            <br />
-            Purchase Date: {appliance.PurchaseDate}
-            <br />
-            Warranty Expires: {appliance.WarrantyExpirationDate}
-            <br />
-            Cost: ${appliance.CostOfAppliance}
-            <br />
-            <br />
-            <button 
-              onClick={handleSearchAgain}
+          <h1>Search Results</h1>
+          
+          <div className="search-result-card">
+            <div className="result-header">
+              <strong>{appliance.ApplianceType}</strong>
+              <p>{appliance.Brand} - {appliance.ModelNumber}</p>
+            </div>
+
+            <div className="result-grid">
+              <div>
+                <p>Serial Number</p>
+                <p>{appliance.SerialNumber}</p>
+              </div>
+              <div>
+                <p>Cost</p>
+                <p>${appliance.CostOfAppliance}</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setExpandedDetails(!expandedDetails)}
               className="btn btn-primary"
+              style={{ marginBottom: '1rem' }}
             >
-              Search Another Appliance
+              {expandedDetails ? '▼ Hide Details' : '▶ View Full Details'}
             </button>
-            <br />
-            <Link href="/" style={{ color: 'var(--success)', textDecoration: 'underline', marginTop: '1rem', display: 'inline-block' }}>
-              Back to Home
-            </Link>
+
+            {expandedDetails && (
+              <div className="expanded-details">
+                <strong>Owner Information:</strong>
+                <p style={{ color: 'var(--text-primary)' }}>
+                  {appliance.FirstName} {appliance.LastName}
+                </p>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                  {appliance.Email}
+                </p>
+                
+                <br />
+                
+                <strong>Dates:</strong>
+                <p style={{ color: 'var(--text-primary)' }}>
+                  Warranty Expires: {new Date(appliance.WarrantyExpirationDate).toLocaleDateString()}
+                </p>
+                <p style={{ color: 'var(--text-primary)' }}>
+                  Warranty Expires: {new Date(appliance.WarrantyExpirationDate).toLocaleDateString()}
+                </p>
+              </div>
+            )}
           </div>
+
+          <button 
+            onClick={handleSearchAgain}
+            className="btn btn-primary"
+          >
+            Search Another Appliance
+          </button>
+          <br />
+          <Link href="/" style={{ color: 'var(--success)', textDecoration: 'underline', marginTop: '1rem', display: 'inline-block' }}>
+            Back to Home
+          </Link>
         </div>
       )}
     </div>

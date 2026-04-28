@@ -17,27 +17,27 @@ function Navbar() {
       <ul>
         <li>
           <Link href="/">
-            🏠 Home
+             Home  🏠
           </Link>
         </li>
         <li>
           <Link href="/add">
-            ➕ Add
+             Add  ➕
           </Link>
         </li>
         <li>
           <Link href="/search">
-            🔍 Search
+             Search 🔍
           </Link>
         </li>
         <li>
           <Link href="/update">
-            ✏️ Update
+             Update  🔄
           </Link>
         </li>
         <li>
           <Link href="/delete">
-            🗑️ Delete
+             Delete  🗑️
           </Link>
         </li>
       </ul>
