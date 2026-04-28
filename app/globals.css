@@ -39,30 +39,35 @@ nav {
   margin-bottom: 2rem;
   border-bottom: 2px solid var(--accent);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 999;
 }
 
 nav ul {
   list-style: none;
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   max-width: 1200px;
   margin: 0 auto;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 nav a {
   color: var(--text-primary);
   text-decoration: none;
   font-weight: 600;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.25rem;
   border-radius: 6px;
   transition: all 0.2s ease;
+  display: inline-block;
 }
 
 nav a:hover {
   background: var(--accent);
   color: white;
 }
-
 /* Form styling */
 .form-container {
   max-width: 560px;
